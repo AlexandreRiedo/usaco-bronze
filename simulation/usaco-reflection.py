@@ -7,42 +7,27 @@ updates = [
 ]
 
 
-def calculate_reflective_operations(grid, grid_size):
-    operations_used = set()
-    operations_used_alt = set()
-    for y in range(grid_size // 2):
-        for x in range(grid_size // 2):
-            count = [0, 0]
-            positions = [
-                (x, y),
-                (grid_size - x - 1, y),
-                (x, grid_size - y - 1),
-                (grid_size - x - 1, grid_size - y - 1),
-            ]
+def calculate_reflective(grid, grid_size) -> int:
+    operations_used = 0
+    half_size = grid_size // 2
+    for x in range(half_size):
+        opp_x = grid_size - x - 1
+        for y in range(half_size):
+            opp_y = grid_size - y - 1
+            
+            dots = 0
+            
+            # Direct lookups avoid tuple allocation and for-loop overhead
+            if grid[x][y] == ".": dots += 1
+            if grid[opp_x][y] == ".": dots += 1
+            if grid[x][opp_y] == ".": dots += 1
+            if grid[opp_x][opp_y] == ".": dots += 1
+            
+            # The minimum operations required is the lesser of the dots 
+            # count or the hashes count (4 - dots).
+            operations_used += dots if dots < 2 else 4 - dots
 
-            for pos in positions:
-                if grid[pos[0]][pos[1]] == ".":
-                    count[0] += 1
-                else:
-                    count[1] += 1
-
-            if count[0] == count[1]:
-                for pos in positions:
-                    if grid[pos[0]][pos[1]] == ".":
-                        operations_used.add((pos[0], pos[1]))
-                    if grid[pos[0]][pos[1]] == "#":
-                        operations_used_alt.add((pos[0], pos[1]))
-            elif count.index(min(count)) == 0:
-                for pos in positions:
-                    if grid[pos[0]][pos[1]] == ".":
-                        operations_used.add((pos[0], pos[1]))
-                        operations_used_alt.add((pos[0], pos[1]))
-            elif count.index(min(count)) == 1:
-                for pos in positions:
-                    if grid[pos[0]][pos[1]] == "#":
-                        operations_used.add((pos[0], pos[1]))
-                        operations_used_alt.add((pos[0], pos[1]))
-    return operations_used, operations_used_alt
+    return operations_used
 
 
 def apply_update(grid, update) -> None:
@@ -53,69 +38,9 @@ def apply_update(grid, update) -> None:
 
 
 # Before any updates
-ref_ops, alt_ref_ops = calculate_reflective_operations(grid, grid_size)
-curr_best = min(len(ref_ops), len(alt_ref_ops))
-print(curr_best)
-
-# rprint(f"{ref_ops=} {alt_ref_ops=}")
-# for op in alt_ref_ops:
-#     apply_update(grid, op)
-# for row in grid:
-#     rprint("".join(row))
+print(calculate_reflective(grid, grid_size))
 
 # After every update
 for update in updates:
     apply_update(grid, update)
-
-    if update in ref_ops:
-        ref_ops.remove(update)
-    else:
-        ref_ops.add(update)
-
-    if update in alt_ref_ops:
-        alt_ref_ops.remove(update)
-    else:
-        alt_ref_ops.add(update)
-
-    if len(ref_ops) > curr_best and len(alt_ref_ops) > curr_best:
-        ref_ops, alt_ref_ops = calculate_reflective_operations(grid, grid_size)
-
-    print(min(len(ref_ops), len(alt_ref_ops)))
-
-    # if update in ref_ops:
-    #     ref_ops.remove(update)
-    # else:
-    #     if len(ref_ops) == curr_best:
-    #         new_ref_ops, new_alt_ref_ops = calculate_reflective_operations(grid, grid_size)
-    #         if len(new_ops) < len(ref_ops):
-    #             ref_ops = new_ops
-    #     else:
-    #         curr_best += 1
-    #         ref_ops.add(update)
-
-
-"""
-4 5
-..#.
-##.#
-####
-..##
-1 3
-2 3
-4 3
-4 4
-4 4
-"""
-
-"""
-4 5
-....
-##.#
-####
-..##
-0 2
-1 2
-3 2
-3 3
-3 3
-"""
+    print(calculate_reflective(grid, grid_size))
