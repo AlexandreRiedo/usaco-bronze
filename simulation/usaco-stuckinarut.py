@@ -1,4 +1,4 @@
-MAX_SIMULATION_DEPTH = 10_000
+MAX_SIMULATION_DEPTH = 1_000
 
 num_locations = int(input())
 locations = []
@@ -20,7 +20,9 @@ for _ in range(MAX_SIMULATION_DEPTH):
         elif location[0] == "N":
             location[2] += 1
 
-    for east_location in filter(lambda x: x[0] == "E", locations):
+    for east_location in filter(
+        lambda x: x[0] == "E" and tuple(x) not in to_ignore, locations
+    ):
         for north_location in filter(lambda x: x[0] == "N", locations):
             if (
                 east_location[1] == north_location[1]
@@ -29,7 +31,9 @@ for _ in range(MAX_SIMULATION_DEPTH):
             ):
                 to_ignore.add(tuple(east_location))
 
-    for north_location in filter(lambda x: x[0] == "N", locations):
+    for north_location in filter(
+        lambda x: x[0] == "N" and tuple(x) not in to_ignore, locations
+    ):
         for east_location in filter(lambda x: x[0] == "E", locations):
             if (
                 north_location[2] == east_location[2]
@@ -55,4 +59,10 @@ E 4 6
 E 10 4
 N 11 2
 N 8 1
+"""
+
+# TODO
+"""
+Get a new example and study it carefully
+Solution without simulation?
 """
