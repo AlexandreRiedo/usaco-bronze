@@ -9,6 +9,7 @@ updates = [
 
 def calculate_reflective_operations(grid, grid_size):
     operations_used = set()
+    operations_used_alt = set()
     for y in range(grid_size // 2):
         for x in range(grid_size // 2):
             count = [0, 0]
@@ -25,15 +26,23 @@ def calculate_reflective_operations(grid, grid_size):
                 else:
                     count[1] += 1
 
-            if count.index(min(count)) == 0:
+            if count[0] == count[1]:
                 for pos in positions:
                     if grid[pos[0]][pos[1]] == ".":
                         operations_used.add((pos[0], pos[1]))
+                    if grid[pos[0]][pos[1]] == "#":
+                        operations_used_alt.add((pos[0], pos[1]))
+            elif count.index(min(count)) == 0:
+                for pos in positions:
+                    if grid[pos[0]][pos[1]] == ".":
+                        operations_used.add((pos[0], pos[1]))
+                        operations_used_alt.add((pos[0], pos[1]))
             elif count.index(min(count)) == 1:
                 for pos in positions:
                     if grid[pos[0]][pos[1]] == "#":
                         operations_used.add((pos[0], pos[1]))
-    return operations_used
+                        operations_used_alt.add((pos[0], pos[1]))
+    return operations_used, operations_used_alt
 
 
 def apply_update(grid, update) -> None:
@@ -43,13 +52,16 @@ def apply_update(grid, update) -> None:
         grid[update[0]][update[1]] = "#"
 
 
-### TESTING
-# print(calculate_reflective_operations(grid, grid_size))
-
 # Before any updates
-ref_ops = calculate_reflective_operations(grid, grid_size)
-curr_best = len(ref_ops)
+ref_ops, alt_ref_ops = calculate_reflective_operations(grid, grid_size)
+curr_best = min(len(ref_ops), len(alt_ref_ops))
 print(curr_best)
+
+# rprint(f"{ref_ops=} {alt_ref_ops=}")
+# for op in alt_ref_ops:
+#     apply_update(grid, op)
+# for row in grid:
+#     rprint("".join(row))
 
 # After every update
 for update in updates:
@@ -58,14 +70,28 @@ for update in updates:
     if update in ref_ops:
         ref_ops.remove(update)
     else:
-        if len(ref_ops) == curr_best:
-            new_ops = calculate_reflective_operations(grid, grid_size)
-            if len(new_ops) < len(ref_ops):
-                ref_ops = new_ops
-        else:
-            curr_best += 1
-            ref_ops.add(update)
-    print(len(ref_ops))
+        ref_ops.add(update)
+
+    if update in alt_ref_ops:
+        alt_ref_ops.remove(update)
+    else:
+        alt_ref_ops.add(update)
+
+    if len(ref_ops) > curr_best and len(alt_ref_ops) > curr_best:
+        ref_ops, alt_ref_ops = calculate_reflective_operations(grid, grid_size)
+
+    print(min(len(ref_ops), len(alt_ref_ops)))
+
+    # if update in ref_ops:
+    #     ref_ops.remove(update)
+    # else:
+    #     if len(ref_ops) == curr_best:
+    #         new_ref_ops, new_alt_ref_ops = calculate_reflective_operations(grid, grid_size)
+    #         if len(new_ops) < len(ref_ops):
+    #             ref_ops = new_ops
+    #     else:
+    #         curr_best += 1
+    #         ref_ops.add(update)
 
 
 """
