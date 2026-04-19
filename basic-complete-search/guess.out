@@ -1,0 +1,5 @@
+all_animals={'sheep', 'goat', 'bird', 'cow'}
+all_chars={'eatsworms', 'eatsgrass', 'flies', 'isawesome', 'goesmoo', 'makesmilk'}
+chars=defaultdict(<class 'set'>, {'flies': {'bird'}, 'eatsworms': {'bird'}, 'eatsgrass': {'sheep', 'goat', 'cow'}, 'isawesome': {'cow'}, 'makesmilk': {'goat', 'cow'}, 'goesmoo': {'cow'}})
+animals_to_chars={'bird': {'flies', 'eatsworms'}, 'cow': {'goesmoo', 'makesmilk', 'eatsgrass', 'isawesome'}, 'sheep': {'eatsgrass'}, 'goat': {'eatsgrass', 'makesmilk'}}
+max_chars=4
