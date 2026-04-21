@@ -1,7 +1,8 @@
 import itertools
+import sys
 from math import inf
 
-num_tests = int(input())
+num_tests = int(sys.stdin.readline().strip())
 
 
 def get_target_sums(periods):
@@ -12,37 +13,40 @@ def get_target_sums(periods):
     return target_sums
 
 
-def calculate_modifications(periods, target_sum: int):
+def calculate_modifications(init_period, periods_no_first, target_sum: int):
     modifications = 0
-    equalized_periods = [periods[0]]
+    current = init_period
 
-    for period in periods[1:]:
-        if equalized_periods[-1] > target_sum:
+    for period in periods_no_first:
+        if current > target_sum:
             return inf
-        elif equalized_periods[-1] < target_sum:
-            equalized_periods[-1] += period
+        elif current < target_sum:
+            current += period
             modifications += 1
-        elif equalized_periods[-1] == target_sum:
-            equalized_periods.append(period)
+        elif current == target_sum:
+            current = period
 
-    if len(set(equalized_periods)) != 1:
+    if current != target_sum:
         return inf
 
     return modifications
 
 
 for _ in range(num_tests):
-    num_periods = int(input())
-    periods = [int(item) for item in input().split()]
+    num_periods = int(sys.stdin.readline().strip())
+    periods = [int(item) for item in sys.stdin.readline().strip().split()]
     target_sums = get_target_sums(periods)
 
     min_modifications = inf
+    init_period = periods[0]
+    periods_no_first = periods[1:]
     for target_sum in target_sums:
         min_modifications = min(
-            min_modifications, calculate_modifications(periods, target_sum)
+            min_modifications,
+            calculate_modifications(init_period, periods_no_first, target_sum),
         )
 
-    print(min_modifications)
+    sys.stdout.write(f"{min_modifications}\n")
 
 
 """
