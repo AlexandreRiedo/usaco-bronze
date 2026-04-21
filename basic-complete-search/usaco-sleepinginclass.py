@@ -38,11 +38,7 @@ for _ in range(num_tests):
     min_modifications = inf
     init_period = periods[0]
     periods_no_first = periods[1:]
-    for target_sum in target_sums:
-        # min_modifications = min(
-        #     min_modifications,
-        #     calculate_modifications(init_period, periods_no_first, target_sum),
-        # )
+    for target_sum in sorted(target_sums):
         res = calculate_modifications(init_period, periods_no_first, target_sum)
         if res != inf:
             min_modifications = res
@@ -50,6 +46,10 @@ for _ in range(num_tests):
 
     sys.stdout.write(f"{min_modifications}\n")
 
+"""
+IDEA:
+The best target_sum must be smaller than larger, since that means less modifications will be needed.
+"""
 
 """
 IDEA:
