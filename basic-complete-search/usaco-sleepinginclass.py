@@ -7,13 +7,11 @@ num_tests = int(sys.stdin.readline().strip())
 
 def get_target_sums(periods):
     max_periods = max(periods)
-    target_sums = set(
-        filter(lambda x: x >= max_periods, set(itertools.accumulate(periods)))
-    )
+    target_sums = set(filter(lambda x: x >= max_periods, itertools.accumulate(periods)))
     return target_sums
 
 
-def calculate_modifications(init_period, periods_no_first, target_sum: int):
+def calculate_modifications(init_period: int, periods_no_first: list, target_sum: int):
     modifications = 0
     current = init_period
 
@@ -41,13 +39,22 @@ for _ in range(num_tests):
     init_period = periods[0]
     periods_no_first = periods[1:]
     for target_sum in target_sums:
-        min_modifications = min(
-            min_modifications,
-            calculate_modifications(init_period, periods_no_first, target_sum),
-        )
+        # min_modifications = min(
+        #     min_modifications,
+        #     calculate_modifications(init_period, periods_no_first, target_sum),
+        # )
+        res = calculate_modifications(init_period, periods_no_first, target_sum)
+        if res != inf:
+            min_modifications = res
+            break
 
     sys.stdout.write(f"{min_modifications}\n")
 
+
+"""
+IDEA:
+Improve the target_sums algorithm to throw out any impossibilities
+"""
 
 """
 1_000_000
