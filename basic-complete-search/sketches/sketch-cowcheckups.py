@@ -1,6 +1,7 @@
 """
 IDEA: l-1 r+1 keeps the same middle structure
 1 2 3 4 5 6 7 8 9
+1 2 5 4 3 6 7 8 9 (vet_order)
 1 2 3 4 5 6 7 8 9 (l4 r4)
 1 2 5 4 3 6 7 8 9 (l3 r5)
 1 6 5 4 3 2 7 8 9 (l2 r6)
@@ -28,8 +29,9 @@ VALUES TO TEST:
 """
 
 test_a = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-test_b = [1, 3, 2, 2, 1, 3, 2]
-test = list(range(1, 100 + 1))
+test = [1, 3, 2, 2, 1, 3, 2]
+test_d = [1, 2, 3]
+test_c = list(range(1, 100 + 1))
 LEN = len(test)
 tuples_to_test = []
 
@@ -41,19 +43,19 @@ for left in range(1, 1 + LEN):
 def get_expansion_tuples(values, index, offset):
     left = index
     right = index + offset
-    tuples_found = [(left, right)]
+    tuples_found = [(left - 1, right - 1)]
     expansion = 0
     while left - expansion > 1 and right + expansion <= len(values) - 1:
         expansion += 1
-        tuples_found.append((left - expansion, right + expansion))
+        tuples_found.append((left - 1 - expansion, right - 1 + expansion))
     return tuples_found
 
 
 tuples_to_find = [(LEN, LEN)]
-OFFSET_SINGLE = 0
 count = 1
 cases = 1
 print("SINGLE")
+OFFSET_SINGLE = 0
 for i in range(1, LEN):
     print(get_expansion_tuples(test, i, OFFSET_SINGLE))
     count += len(get_expansion_tuples(test, i, OFFSET_SINGLE))

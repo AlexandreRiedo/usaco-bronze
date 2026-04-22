@@ -3,11 +3,12 @@ farmer_order = [int(item) - 1 for item in input().split()]
 vet_order = [int(item) - 1 for item in input().split()]
 
 
-def count_checked(proposed_order, vet_order):
+def count_checked(proposed_order, vet_order, left, right):
     count = 0
-    for a, b in zip(proposed_order, vet_order):
-        if a == b:
-            count += 1
+    if proposed_order[left] == vet_order[right]:
+        count += 1
+    if proposed_order[right] == vet_order[left]:
+        count += 1
     return count
 
 
@@ -34,88 +35,47 @@ def build_right_checked(farmer_order, vet_order, num_cows):
     return checked_right
 
 
+def get_expansion_tuples(values, index, offset):
+    left = index
+    right = index + offset
+    tuples_found = [(left - 1, right - 1)]
+    expansion = 0
+    while left - expansion > 1 and right + expansion <= len(values) - 1:
+        expansion += 1
+        tuples_found.append((left - 1 - expansion, right - 1 + expansion))
+    return tuples_found
+
+
 checked_left = [0] + build_left_checked(farmer_order, vet_order, num_cows)
 checked_right = build_right_checked(farmer_order, vet_order, num_cows) + [0]
-
 checked_count = {i: 0 for i in range(num_cows + 1)}
-for left in range(num_cows):
-    for right in range(left + 1, num_cows + 1):
-        checked_count[
-            count_checked(
-                list(reversed(farmer_order[left:right])),
-                vet_order[left:right],
+
+calculations = 1
+
+for offset in (0, 1):
+    for i in range(1, num_cows):
+        prev_result = 0
+        result = 0
+        for left, right in get_expansion_tuples(farmer_order, i, offset):
+            calculations += 1
+            if left == right:
+                to_add = 0 if farmer_order[left] != vet_order[left] else 1
+            else:
+                to_add = count_checked(farmer_order, vet_order, left, right)
+
+            result = (
+                to_add + prev_result + checked_left[left] + checked_right[right + 1]
             )
-            + checked_left[left]
-            + checked_right[right]
-        ] += 1
+            prev_result += to_add
+
+            checked_count[result] += 1
+
+
+checked_count[checked_left[num_cows - 1] + checked_right[num_cows - 1]] += 1
 
 for _, count in sorted(checked_count.items(), key=lambda kv: kv[0]):
     print(count)
 
-"""
-3
-1 3 2
-3 2 1
+from rich import print as rprint
 
-7
-1 3 2 2 1 3 2
-3 2 2 1 2 3 1
-1 3 2 1 2 3 2 (l4 r5)
-1 3 2 2 2 3 1 (l5 r7)
-
-7
-1 3 2 2 1 3 2
-3 2 2 1 2 3 1
-
-
-2 3 1 2 1 3 2 (l1 r3)
-1 3 2 2 3 1 2 (l4 r7)
-1 2 3 2 1 3 2 (l2 r3)
-1 3 2 2 1 2 3 (l6 r7)
-"""
-
-
-"""
-7
-1 3 2 2 1 3 2
-3 2 2 1 2 3 1
-
-1 2 3 2
-2 2 3 1
-
-1 3 2 2 1 3 2
-1 3 1 2 2 3 2
-
-3 1 
-2 3 1
-2 2 3 1
-1 2 2 3 1
-3 1 2 2 3 1
-2 3 1 2 2 3 1
-"""
-
-"""
-1 3 2 2 1 3 2
-3 2 2 1 2 3 1
-
-2 3 1 2 2 3 1
-
-
-1 3 2 2 1 3 2
-1 2 2 3 1 3 2
-1 2 2 3 1 3 2
-
-
-IDEA: l-1 r+1 keeps the same middle structure
-1 2 3 4 5 6 7 8 9
-1 2 3 4 5 6 7 8 9 (l4 r4)
-1 2 5 4 3 6 7 8 9 (l3 r5)
-1 6 5 4 3 2 7 8 9 (l2 r6)
-7 6 5 4 3 2 1 8 9 (l1 r7)
-
-1 2 3 4 5 6 7 8 9
-1 2 6 5 4 3 7 8 9 (l3 r6)
-1 7 6 5 4 3 2 8 9 (l2 r7)
-
-TODO: Find the way to generate all possible lx rx values using this strategy.
-"""
+rprint(f"{calculations=}")
