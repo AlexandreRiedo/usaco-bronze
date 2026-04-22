@@ -72,7 +72,50 @@ for _, count in sorted(checked_count.items(), key=lambda kv: kv[0]):
 1 3 2 2 3 1 2 (l4 r7)
 1 2 3 2 1 3 2 (l2 r3)
 1 3 2 2 1 2 3 (l6 r7)
+"""
 
 
+"""
+7
+1 3 2 2 1 3 2
+3 2 2 1 2 3 1
 
+1 2 3 2
+2 2 3 1
+
+1 3 2 2 1 3 2
+1 3 1 2 2 3 2
+
+3 1 
+2 3 1
+2 2 3 1
+1 2 2 3 1
+3 1 2 2 3 1
+2 3 1 2 2 3 1
+"""
+
+"""
+1 3 2 2 1 3 2
+3 2 2 1 2 3 1
+
+2 3 1 2 2 3 1
+
+
+1 3 2 2 1 3 2
+1 2 2 3 1 3 2
+1 2 2 3 1 3 2
+
+
+IDEA: l-1 r+1 keeps the same middle structure
+1 2 3 4 5 6 7 8 9
+1 2 3 4 5 6 7 8 9 (l4 r4)
+1 2 5 4 3 6 7 8 9 (l3 r5)
+1 6 5 4 3 2 7 8 9 (l2 r6)
+7 6 5 4 3 2 1 8 9 (l1 r7)
+
+1 2 3 4 5 6 7 8 9
+1 2 6 5 4 3 7 8 9 (l3 r6)
+1 7 6 5 4 3 2 8 9 (l2 r7)
+
+TODO: Find the way to generate all possible lx rx values using this strategy.
 """
