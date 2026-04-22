@@ -50,14 +50,11 @@ checked_left = [0] + build_left_checked(farmer_order, vet_order, num_cows)
 checked_right = build_right_checked(farmer_order, vet_order, num_cows) + [0]
 checked_count = {i: 0 for i in range(num_cows + 1)}
 
-calculations = 1
-
 for offset in (0, 1):
     for i in range(1, num_cows):
         prev_result = 0
         result = 0
         for left, right in get_expansion_tuples(farmer_order, i, offset):
-            calculations += 1
             if left == right:
                 to_add = 0 if farmer_order[left] != vet_order[left] else 1
             else:
@@ -75,7 +72,3 @@ checked_count[checked_left[num_cows - 1] + checked_right[num_cows - 1]] += 1
 
 for _, count in sorted(checked_count.items(), key=lambda kv: kv[0]):
     print(count)
-
-from rich import print as rprint
-
-rprint(f"{calculations=}")
