@@ -25,11 +25,6 @@ with open("badmilk.in") as file:
         sick_logs[person] = time
         sick_friends.add(person)
 
-# rprint("")
-# rprint(f"{drink_logs=}")
-# rprint(f"{sick_logs=}")
-# rprint(f"{persons_per_milk=}")
-# rprint("")
 
 potentially_bad_milks_per_friend = {sick_friend: set() for sick_friend in sick_friends}
 for person, drinking_history in filter(
@@ -41,21 +36,13 @@ for person, drinking_history in filter(
         if drink_log.time < last_sick_time:
             potentially_bad_milks_per_friend[person].add(drink_log.milk_type)
 
-    # rprint(f"{person=}")
-    # rprint(f"{last_sick_time=}")
-# rprint("")
-# rprint(f"{potentially_bad_milks_per_friend=}")
-
 potentially_bad_milks = set(
     reduce(lambda a, b: a.intersection(b), potentially_bad_milks_per_friend.values())
 )
-# rprint("")
-# rprint(f"{potentially_bad_milks=}")
 
 max_potential_sickness = max(
     len(persons_per_milk[milk_type]) for milk_type in potentially_bad_milks
 )
-# rprint(f"{max_potential_sickness=}")
 
 with open("badmilk.out", "w") as file:
     file.write(f"{max_potential_sickness}\n")
