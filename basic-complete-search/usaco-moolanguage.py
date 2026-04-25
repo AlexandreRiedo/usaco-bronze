@@ -41,7 +41,9 @@ for _ in range(num_tests):
                     sentences.append(words["transitive-verb"].pop() + " ")
                     sentences.append(words["noun"].pop())
                     word_count += 3
-                    while len(words["noun"]) + 1 > len(words["intransitive-verb"]):
+                    while len(words["noun"]) > min(
+                        num_sentences - 1, len(words["intransitive-verb"])
+                    ):
                         sentences.append(", ")
                         sentences.append(words["noun"].pop())
                         word_count += 1
@@ -60,7 +62,9 @@ for _ in range(num_tests):
                     sentences.append(words["transitive-verb"].pop() + " ")
                     sentences.append(words["noun"].pop())
                     word_count += 3
-                    while len(words["noun"]) + 1 > len(words["intransitive-verb"]):
+                    while len(words["noun"]) > min(
+                        num_sentences - 1, len(words["intransitive-verb"])
+                    ):
                         sentences.append(", ")
                         sentences.append(words["noun"].pop())
                         word_count += 1
@@ -80,7 +84,9 @@ for _ in range(num_tests):
                     sentences.append(words["transitive-verb"].pop() + " ")
                     sentences.append(words["noun"].pop())
                     word_count += 3
-                    while len(words["noun"]) + 1 > len(words["intransitive-verb"]):
+                    while len(words["noun"]) > min(
+                        num_sentences - 1, len(words["intransitive-verb"])
+                    ):
                         sentences.append(", ")
                         sentences.append(words["noun"].pop())
                         word_count += 1
@@ -116,6 +122,11 @@ for _ in range(num_tests):
                 word_count += 2
 
         # rprint("".join(sentences))
+        # rprint(f"{words["noun"]=}")
+        # rprint(f"{words['transitive-verb']=}")
+        # rprint(f"{words['intransitive-verb']=}")
+        # rprint(f"{num_sentences=}")
+        # rprint("")
 
     print(word_count)
     print("".join(sentences).strip())
