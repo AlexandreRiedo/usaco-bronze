@@ -1,4 +1,3 @@
-import itertools
 import operator
 from collections.abc import Callable
 
@@ -26,26 +25,29 @@ OPERATOR_PERMUTATIONS = permutate_operators()
 
 def calculate(card_hand: list[int], operators: list[Callable]):
     a, b, c, d = card_hand
-    best = 0
+    op1, op2, op3 = operators
 
-    for order in itertools.permutations(range(3), 3):
-        calculate = 0
-        for idx, op_idx in enumerate(order):
-            if idx == 0:
-                calculate = operators[op_idx](a, b)
-            else:
-                calculate = operators[op_idx](calculate, card_hand[idx + 1])
+    calculate = 0
+    for idx, op_idx in enumerate(range(3)):
+        if idx == 0:
+            calculate = operators[op_idx](a, b)
+        else:
+            calculate = operators[op_idx](calculate, card_hand[idx + 1])
 
-            if int(calculate) != calculate:
-                calculate = 0
-                break
-
-        if calculate > 24:
+        if int(calculate) != calculate:
             calculate = 0
+            break
+    if calculate > 24:
+        calculate = 0
 
-        best = max(best, calculate)
+    calculate_bis = 0
+    temp1, temp2 = op1(a, b), op3(c, d)
+    if int(temp1) == temp1 and int(temp2) == temp2 and temp2 != 0:
+        calculate_bis = op2(temp1, temp2)
+    if int(calculate_bis) != calculate_bis or calculate_bis > 24:
+        calculate_bis = 0
 
-    return int(best)
+    return max(int(calculate), int(calculate_bis))
 
 
 num_card_hands = int(input())
