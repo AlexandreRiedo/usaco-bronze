@@ -19,7 +19,7 @@ def solve(
         if len(current_permutation) == n:
             is_solved[0] = True
             print(" ".join([str(item) for item in current_permutation]))
-            return
+            exit()
         for num in range(1, n + 1):
             if is_solved[0]:
                 return
