@@ -1,5 +1,7 @@
 x1, y1, x2, y2, x3, y3 = map(int, input().split())
 SIZE = max(x1, y1, x2, y2, x3, y3)
+LOGO_CHAR = {0: "A", 1: "B", 2: "C"}
+logos = [(x1, y1), (x2, y2), (x3, y3)]
 
 
 def place(grid: list, ad_x: int, ad_y: int, ad_char: str, mode: int) -> tuple:
@@ -59,42 +61,60 @@ def place(grid: list, ad_x: int, ad_y: int, ad_char: str, mode: int) -> tuple:
         return free_x, free_x + ad_x, free_y, free_y + ad_y
 
 
-def clear(grid, start_x, end_x, start_y, end_y):
+def clear(grid: list, start_x: int, end_x: int, start_y: int, end_y: int):
     for y in range(start_y, end_y):
         for x in range(start_x, end_x):
             grid[y][x] = "_"
 
 
-print("")
 grid = [["_" for _ in range(SIZE)] for _ in range(SIZE)]
-for row in grid:
-    print(row)
+is_solved = False
 
-print("")
-print(place(grid, x1, y1, "A", 1))
-for row in grid:
-    print(row)
 
-print("")
-print(place(grid, x2, y2, "B", 1))
-for row in grid:
-    print(row)
+def solve(grid: list, used_logos=set()):
+    global is_solved
 
-print("")
-vals = place(grid, x3, y3, "C", 1)
-print(vals)
-for row in grid:
-    print(row)
+    if len(used_logos) == 3:
+        for y in range(SIZE):
+            for x in range(SIZE):
+                if grid[y][x] == "_":
+                    return
+        print(SIZE)
+        for row in grid:
+            print("".join(row))
+        is_solved = True
+        exit()
 
-print("")
-clear(grid, *vals)
-for row in grid:
-    print(row)
+    for logo_idx, logo in enumerate(logos):
+        if logo_idx in used_logos:
+            continue
 
-"""
-AAAACC
-AAAACC
-AAAACC
-AAAACC
+        ad_x, ad_y = logo
+        if (coords := place(grid, ad_x, ad_y, LOGO_CHAR[logo_idx], 1)) != (
+            -666,
+            -666,
+            -666,
+            -666,
+        ):
+            used_logos.add(logo_idx)
+            solve(grid, used_logos)
+            clear(grid, *coords)
+            used_logos.remove(logo_idx)
+        if (coords := place(grid, ad_x, ad_y, LOGO_CHAR[logo_idx], 2)) != (
+            -666,
+            -666,
+            -666,
+            -666,
+        ):
+            used_logos.add(logo_idx)
+            solve(grid, used_logos)
+            clear(
+                grid,
+                *coords,
+            )
+            used_logos.remove(logo_idx)
 
-"""
+
+solve(grid)
+if not is_solved:
+    print("-1")
