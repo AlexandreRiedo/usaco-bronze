@@ -1,23 +1,22 @@
 from collections import defaultdict
 
-len_nums = int(input())
-nums = list(map(int, input().split()))
+n = int(input())
+array = [int(x) for x in input().split()]
 
-freq = defaultdict(list)
-for idx, num in enumerate(nums):
-    freq[num].append(idx)
+positions = defaultdict(list)
+for i, x in enumerate(array):
+    positions[x].append(i)
 
-prefix = []
-distinct = set()
-for num in nums:
-    prefix.append(len(distinct))
-    distinct.add(num)
+distinct_before = []
+seen = set()
+for x in array:
+    distinct_before.append(len(seen))
+    seen.add(x)
 
-count = 0
-for candidate, indices in freq.items():
-    if len(indices) >= 2:
-        count += prefix[indices[-2]]
-        if len(indices) >= 3:
-            count -= 1
-
-print(count)
+ans = 0
+for ps in positions.values():
+    if len(ps) >= 2:
+        ans += distinct_before[ps[-2]]
+        if len(ps) >= 3:
+            ans -= 1
+print(ans)
