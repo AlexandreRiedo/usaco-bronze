@@ -28,6 +28,25 @@ else:
     edits = max_to_edit - num_counter.most_common()[0][1]
     print(edits)
 
+"""
+TEST CASE 12 FAIL
+999 0
+1 2 1 
+3 4 3 
+5 6 5 
+7 8 7 
+9 10 9 
+11 12 11
+13 14 13 
+15 16 15 
+17 18 17 etc...
+"""
+
+"""
+1
+1 2 3 4 1
+3
+"""
 
 """
 10 0
