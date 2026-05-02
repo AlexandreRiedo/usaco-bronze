@@ -115,6 +115,35 @@ best with 6: 1 1 1 1 1 1 1 1 1 1
 10 0
 5 1 3 2 2 1 3 1 2 3
 best with 6: 5 1 1 1 1 1 1 1 1 1 1 or 5 3 3 3 3 3 3 3 3 3 3 or 5 2 2 2 2 2 2 2 2 2
+IDEA: Just blanket fill all numbers with the most popular one and count?
+
+10 0
+5 1 3 2 2 1 3 1 4 3
+best with 6: 5 1 1 1 1 1 1 1 1 1 1 or 5 3 3 3 3 3 3 3 3 3 3
+
+10 0
+5 3 1 2 2 1 3 1 4 3
+best with 6: 5 1 1 1 1 1 1 1 1 1 1 or 5 3 3 3 3 3 3 3 3 3 3
+
+10 0
+5 3 1 2 1 1 3 1 4 3
+best with 5: 5 1 1 1 1 1 1 1 1 1 1
+
+10 0
+5 5 5 2 5 1 3 3 3 3
+best with 1: 5 5 5 5 5 1 3 3 3 3
+
+10 0
+5 5 5 2 5 1 3 2 3 3
+best with 6: 5 5 5 5 5 5 5 5 5 5
+
+10 0
+1 2 1 3 1 4 6 5 5 5
+best with 2: 1 1 1 1 1 4 6 5 5 5
+
+10 0
+1 5 1 3 1 4 6 5 5 5
+best with 6: 5 5 5 5 5 5 5 5 5 5
 """
 
 """
