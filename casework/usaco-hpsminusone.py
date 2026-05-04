@@ -27,37 +27,40 @@ for _ in range(num_games):
     count = 0
 
     killer_symbols = loses[elsie_left] & loses[elsie_right]
+    drawing_symbols = draws[elsie_left] | draws[elsie_right]
+    losing_symbols = wins[elsie_left] | wins[elsie_right]
+    left_killer_symbols = loses[elsie_left] - wins[elsie_right]
+    right_killer_symbols = loses[elsie_right] - wins[elsie_left]
+    # rprint(f"{drawing_symbols=}")
+    # rprint(f"{losing_symbols=}")
     # rprint(f"{killer_symbols=}")
-    if len(killer_symbols) == 0:
-        print(count)
-    else:
-        drawing_symbols = draws[elsie_left] | draws[elsie_right]
-        losing_symbols = wins[elsie_left] | wins[elsie_right]
-        # rprint(f"{drawing_symbols=}")
-        # rprint(f"{losing_symbols=}")
+    # rprint(f"{left_killer_symbols=}")
+    # rprint(f"{right_killer_symbols=}")
 
-        # Case (killer, killer)
-        count += len(killer_symbols) * len(killer_symbols)
+    # Case (left_killer, right_killer + draw breaker)
+    left_case = {
+        (left, right)
+        for left in left_killer_symbols
+        for right in (right_killer_symbols - draws[elsie_left])
+    }
 
-        # Case (killer, loses)
-        count += len(killer_symbols) * len(losing_symbols)
+    # Case (left_killer + draw breaker, right_killer)
+    right_case = {
+        (left, right)
+        for left in (left_killer_symbols - draws[elsie_right])
+        for right in right_killer_symbols
+    }
 
-        # Case (killer, draws)
-        count += len(killer_symbols) * len(drawing_symbols)
+    # Case (killer, loses)
+    case_1 = {(killer, lose) for killer in killer_symbols for lose in losing_symbols}
 
-        # Case (loses, killer)
-        count += len(losing_symbols) * len(killer_symbols)
+    # Case (killer, draws)
+    case_2 = {(killer, draw) for killer in killer_symbols for draw in drawing_symbols}
 
-        # Case (draws, killer)
-        count += len(drawing_symbols) * len(killer_symbols)
+    # Case (loses, killer)
+    case_3 = {(lose, killer) for killer in killer_symbols for lose in losing_symbols}
 
-        print(count)
+    # Case (draws, killer)
+    case_4 = {(draw, killer) for killer in killer_symbols for draw in drawing_symbols}
 
-"""
-SAMPLE INPUT
-2 2 (Wboth Wboth)
-2 3 (Wboth Loses)
-2 1 (Wboth Draws)
-1 2 (Draws Wboth)
-3 2 (Loses Wboth)
-"""
+    print(len(left_case | right_case | case_1 | case_2 | case_3 | case_4))
