@@ -1,5 +1,3 @@
-from collections import Counter
-
 num_cows = int(input())
 cows = list(input())
 
@@ -7,8 +5,6 @@ left_G = cows.index("G")
 left_H = cows.index("H")
 right_G = len(cows) - list(reversed(cows)).index("G") - 1  # Inclusive
 right_H = len(cows) - list(reversed(cows)).index("H") - 1  # Inclusive
-
-count_cows = Counter(cows)
 
 list_idx = [
     (start, end) for start, end in enumerate(map(lambda x: int(x) - 1, input().split()))
