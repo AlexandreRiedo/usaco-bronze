@@ -8,34 +8,35 @@ class Point(NamedTuple):
 
 
 def solve(photo, photo_size, shift_right, shift_down):
-    count = 0
+    used_pos = set()
+
     for y in range(photo_size):
         for x in range(photo_size):
             char = photo[y][x]
+            pos = (x, y)
+            back_pos = (x - shift_right, y - shift_down)
             back_char = (
                 photo[y - shift_down][x - shift_right]
-                if (y - shift_down >= 0 and x - shift_right >= 0)
-                else None
-            )
-            foward_char = (
-                photo[y + shift_down][x + shift_right]
-                if (y + shift_down < photo_size and x + shift_right < photo_size)
+                if ((y - shift_down) >= 0 and (x - shift_right) >= 0)
                 else None
             )
 
             if char == "W":
                 continue
             elif char == "G":
-                if foward_char == "G" or foward_char == "B":
-                    count += 1
-                elif back_char == "W" or back_char is None:
-                    count += 1
+                if back_pos not in used_pos:
+                    used_pos.add(pos)
             elif char == "B":
                 if back_char is None or back_char == "W":
                     return -1
                 else:
-                    count += 1
-    return count
+                    if back_pos not in used_pos and back_pos is not None:
+                        used_pos.add(pos)
+                        used_pos.add(back_pos)
+                    else:
+                        used_pos.add(pos)
+
+    return len(used_pos)
 
 
 num_tests = int(sys.stdin.readline().strip())
