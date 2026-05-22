@@ -13,31 +13,32 @@ with open("milkorder.in") as file:
 def solve(hierarchy, ordering, num_cows):
     for idx in range(num_cows):
         if not ordering:
-            # if 1 in hierarchy:
-            #     hierarchy.pop()
-            # else:
-            return idx + 1
+            if 1 in hierarchy and hierarchy[-1] != 1:
+                hierarchy.pop()
+            else:
+                return idx + 1
         else:
+            # Use the ordering's cow if we're on it
             if ordering[-1][1] == idx:
                 if ordering[-1][0] == 1:
                     return idx + 1
                 ordering.pop()
+            # If the ordering's cow is in the hierarchy, we must first exhaust the cows
+            # of the hierarchy before using the ordering cow.
             elif hierarchy and ordering[-1][0] in hierarchy:
-                if ordering[-1][0] == 1:
+                if hierarchy[-1] == 1:
                     return idx + 1
                 hierarchy.pop()
+            # If the ordering's cow isn't in the hierarchy
             else:
-                return idx + 1
+                if 1 in hierarchy and hierarchy[-1] != 1:
+                    hierarchy.pop()
+                else:
+                    return idx + 1
 
 
 with open("milkorder.out", "w") as f:
     f.write(f"{solve(hierarchy, ordering, num_cows)}\n")
-
-# from rich import print as rprint
-
-# rprint(f"{hierarchy=}")
-# rprint(f"{ordering=}")
-# rprint(f"{solve(hierarchy, ordering, num_cows)=}")
 
 """
 3 4 5 1
