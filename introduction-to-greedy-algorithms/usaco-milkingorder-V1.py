@@ -12,7 +12,11 @@ with open("milkorder.in") as file:
 
 def solve(hierarchy, ordering, num_cows):
     for idx in range(num_cows):
-        if not ordering:
+        # Without any constraints, just use 1
+        if not ordering and not hierarchy:
+            return idx + 1
+        # Without any ordering, start exhausting the hierarchy list
+        if not ordering and hierarchy:
             if 1 in hierarchy and hierarchy[-1] != 1:
                 hierarchy.pop()
             else:
@@ -31,7 +35,7 @@ def solve(hierarchy, ordering, num_cows):
                 hierarchy.pop()
             # If the ordering's cow isn't in the hierarchy
             else:
-                if 1 in hierarchy and hierarchy[-1] != 1:
+                if hierarchy and 1 in hierarchy and hierarchy[-1] != 1:
                     hierarchy.pop()
                 else:
                     return idx + 1
