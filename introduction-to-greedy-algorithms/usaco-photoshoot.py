@@ -1,5 +1,3 @@
-from rich import print as rprint
-
 num_cows = int(input())
 order = list(input())
 
@@ -29,14 +27,10 @@ def flip_scores(order):
 
 count_flips = 0
 scores = flip_scores(order)
-rprint(f"{order=}")
-rprint(f"{scores=}")
 while scores[0][0] > 0:
     count_flips += 1
     order[0 : scores[0][1] + 1] = reversed(order[0 : scores[0][1] + 1])
     scores = flip_scores(order)
-    rprint(f"In Loop: {order=}")
-    rprint(f"In Loop: {scores=}")
 
 print(count_flips)
 
