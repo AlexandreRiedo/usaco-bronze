@@ -4,17 +4,6 @@ num_cows = int(input())
 order = list(input())
 
 
-def find_right_wrong_G(order, right=len(order) - 1):
-    """
-    -1 means the ordering is already perfect!
-    """
-    for i in range(right, -1, -1):
-        if order[i] == "G" and i % 2 == 0:
-            return i
-    else:
-        return -1
-
-
 def flip_scores(order):
     """
     Note that idx are thought of as 1-indexed in the counts
@@ -31,17 +20,28 @@ def flip_scores(order):
             even_G += 1
 
         if idx % 2 == 0:
-            count.append((0))  # on an "odd", the count doesn't change
+            pass
         elif idx % 2 == 1:
-            count.append((odd_G - even_G))
+            count.append((odd_G - even_G, idx))
 
-    return count
+    return sorted(count, key=lambda x: (x[0], x[1]), reverse=True)
 
 
-rprint(f"{find_right_wrong_G(order)=}")
-rprint(f"{flip_scores(order)=}")
+count_flips = 0
+scores = flip_scores(order)
+rprint(f"{order=}")
+rprint(f"{scores=}")
+while scores[0][0] > 0:
+    count_flips += 1
+    order[0 : scores[0][1] + 1] = reversed(order[0 : scores[0][1] + 1])
+    scores = flip_scores(order)
+    rprint(f"In Loop: {order=}")
+    rprint(f"In Loop: {scores=}")
+
+print(count_flips)
 
 """
+INITIAL EXAMPLE
 GGGHGHHGHHHGHG
 .X.....X...X.X
 G score: 4
@@ -49,96 +49,48 @@ G score: 4
 HGHGGGHGHHHGHG
 .X.X.X.X...X.X
 G score: 6
-
-[0,0,0,1,0,0,2]
 """
 
 """
-GHGGHGHGHG -> 4
-HGGGHGHGHG -> 5
-(This needs to flip by exploring potential anchors on the left)
-"""
+RANDOM EXPLORATION
+HHGHGHGHGHHG -> flip @10
+...........X
+HGHGHGHGHHHG
+.X.X.X.X...X
 
-"""
-GGGHGHHHGHHGHG
-.X.........X.X
-G score: 3
-"""
-
-"""
-FLIPPING EVEN
-GGGHGH
-.X....
-HGHGGG
-.X.X.X
-2->5 (even goes to odd, odd goes to even, aka flip the score)
-
-FLIPPING ODD AMOUNT
-GGGHG
-.X...
-GHGGG
-...X.
-1->5, 2->4, 3->3, 5->1 (even goes to even, odd goes to odd)
-"""
-
-"""
-"".join(random.choice("GH") for _ in range(12))
-"""
-
-"""
-HGHGGHGHHHHG
-.X.X.......X
--> 0
-
-HGGGGGHHHGHH
-.X.X.X...X..
--> 0
-
-VIP VIP VIP CASE CASE CASE
-GGHHHHHGHHHH -> flip @4
-.X.....X....
-HHGGHHHGHHHH -> flip @3
-...X...X....
-GHHGHHHGHHHH -> flip @2
-...X...X....
-HGHGHHHGHHHH = 3 flips to achieve perfection
-.X.X...X....
-
-HHGGGGGGGGGG -> flip @3
-...X.X.X.X.X
-GHHGGGGGGGGG -> flip @2
-...X.X.X.X.X
-HGHGGGGGGGGG = 2 flipts for perfection
-.X.X.X.X.X.X
-
-GGHHGGGGGGHH -> flip @4
-.X...X.X.X..
-HHGGGGGGGGHH -> flip @3
+HHHGGGHGHGGH
 ...X.X.X.X..
-GHHGGGGGGGHH -> flip @2
+
+GHGGGGGGGGHH
 ...X.X.X.X..
-HGHGGGGGGGHH = 3 flips to achieve perfection
+HGGGGGGGGGHH
 .X.X.X.X.X..
 
-VIP VIP VIP CASE CASE CASE
-GHHHHHGGHGGH flip @12
-.......X.X..
-HGGHGGHHHHHG flip @5 (A), flip @8 (B)
-.X...X.....X
-FORK A BELOW --------
-GHGGHGHHHHHG flip @2
-...X.X.....X
-HGGGHGHHHHHG = 3 flips to achieve perfection
-.X.X.X.....X
-FORK B below --------
-HHGGHGGHHHHG flip @3
-...X.X.....X
-GHHGHGGHHHHG flip @2
-...X.X.....X
-HGHGHGGHHHHG = 4 flips to achieve perfection
-.X.X.X.....X
+GHGGHGHHHGGH
+...X.X...X..
+HGGGHGHHHGGH
+.X.X.X....X.
+
+GGGGHHGHHHHG
+.X.X.......X
+HHHGHHGGGGHG
+...X...X.X.X
+
+GGGGGGGHGGGG
+.X.X.X...X.X
+GGGGHGGGGGGG
+.X.X.X.X.X.X
 """
 
-"""
 
+"""
+RANDOM EXPLORATION V2
+
+HHGGHGGH
+...X.X..
+
+GHGGHGHH
+...X.X..
+GGHGHGHH
+.X.X.X..
 """
