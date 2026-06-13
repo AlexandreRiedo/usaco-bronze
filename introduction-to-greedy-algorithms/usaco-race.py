@@ -4,11 +4,17 @@ sys.stdin = open("race.in")
 sys.stdout = open("race.out", "w")
 
 
+def total_all_ints(x, y):
+    return ((y - x + 1) * (x + y)) // 2
+
+
 def dist_to_shift(curr_speed, target_speed):
     if curr_speed > target_speed:
-        return sum(range(curr_speed - 1, target_speed - 1, -1))
+        return total_all_ints(target_speed, curr_speed - 1)
+        # return sum(range(curr_speed - 1, target_speed - 1, -1))
     elif curr_speed < target_speed:
-        return sum(range(curr_speed + 1, target_speed + 1))
+        return total_all_ints(curr_speed + 1, target_speed)
+        # return sum(range(curr_speed + 1, target_speed + 1))
     else:
         return 0
 
@@ -29,13 +35,11 @@ def find_max_speed(end_pos):
         if dist_to_shift(0, max_speed) >= end_pos:
             return max_speed
 
-    return -666
-
 
 length, num_cases = map(int, input().split())
 max_speed = find_max_speed(length)
 for _ in range(num_cases):
-    target_speed = min(int(input()), max_speed)
+    target_speed = min(int(input()), max_speed)  # pyright: ignore[reportArgumentType]
 
     count = 0
     pos = 0
