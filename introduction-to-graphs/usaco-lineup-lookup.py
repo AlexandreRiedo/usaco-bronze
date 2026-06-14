@@ -25,7 +25,7 @@ for c in range(len(COWS)):
         if len(neighbors[c]) == 1:
             prev = c
             at = neighbors[c][0]
-            
+
             while len(neighbors[at]) == 2:
                 added[at] = True
                 order.append(at)
@@ -34,3 +34,7 @@ for c in range(len(COWS)):
 
             added[at] = True
             order.append(at)
+
+with open("lineup.out", "w") as out:
+    for c in order:
+        print(COWS[c], file=out)
