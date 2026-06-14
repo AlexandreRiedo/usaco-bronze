@@ -20,7 +20,7 @@ for start, adj in graph.items():
 
 with open("factory.out", "w") as f:
     if not arrivals:
-        answer = -1
+        answer = "-1"
     else:
         answer = sorted(arrivals)[0]
 
