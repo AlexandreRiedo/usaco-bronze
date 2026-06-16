@@ -8,9 +8,9 @@ with open("family.in") as f:
     up = defaultdict(set)
 
     for _ in range(num_cows):
-        a, b = f.readline().split()
-        down[a].add(b)
-        up[b].add(a)
+        x, y = f.readline().split()
+        down[x].add(y)
+        up[y].add(x)
 
 
 def mutate_state(state, direction):
@@ -25,13 +25,13 @@ def mutate_state(state, direction):
             state = "GREAT-" + state
         else:
             state = "ILLEGAL GOING UP"
-    if direction == "down":
+    elif direction == "down":
         if state == "MOTHER":
             state = "SISTER"
         elif state == "GRAND-MOTHER":
             state = "AUNT"
         elif "GREAT-GRAND-MOTHER" in state:
-            state = state[0 : len(state) - 12] + "AUNT"
+            state = state.replace("GRAND-MOTHER", "") + "AUNT"
         elif "AUNT" in state:
             state = "COUSIN"
         else:
@@ -58,16 +58,16 @@ def rec_wrap():
             visited.remove(curr)
 
     visited = set()
-    start = "AA"
-    target = "BB"
+    start = b
+    target = a
     state = "NOT RELATED"
     relation = "NOT RELATED"
     explore(start, state, visited, target)
 
     if "ILLEGAL" in relation:
         visited = set()
-        start = "BB"
-        target = "AA"
+        start = a
+        target = b
         state = "NOT RELATED"
         relation = "NOT RELATED"
         explore(start, state, visited, target)
