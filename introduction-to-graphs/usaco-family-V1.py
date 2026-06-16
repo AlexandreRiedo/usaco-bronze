@@ -34,6 +34,8 @@ def mutate_state(state, direction):
             state = state.replace("GRAND-MOTHER", "") + "AUNT"
         elif "AUNT" in state:
             state = "COUSIN"
+        elif state == "COUSIN":
+            state = "COUSIN"
         else:
             state = "ILLEGAL GOING DOWN"
     return state
@@ -58,16 +60,16 @@ def rec_wrap():
             visited.remove(curr)
 
     visited = set()
-    start = b
-    target = a
+    start = a
+    target = b
     state = "NOT RELATED"
     relation = "NOT RELATED"
     explore(start, state, visited, target)
 
     if "ILLEGAL" in relation:
         visited = set()
-        start = a
-        target = b
+        start = b
+        target = a
         state = "NOT RELATED"
         relation = "NOT RELATED"
         explore(start, state, visited, target)
