@@ -14,31 +14,27 @@ with open("family.in") as f:
 
 
 def mutate_state(state, direction):
-    if direction == "up":
-        if state == "NOT RELATED":
-            state = "MOTHER"
-        elif state == "MOTHER":
-            state = "GRAND-MOTHER"
-        elif state == "GRAND-MOTHER":
-            state = "GREAT-GRAND-MOTHER"
-        elif "GREAT-GRAND-MOTHER" in state:
-            state = "GREAT-" + state
-        else:
-            state = "ILLEGAL GOING UP"
-    elif direction == "down":
-        if state == "MOTHER":
-            state = "SISTER"
-        elif state == "GRAND-MOTHER":
-            state = "AUNT"
-        elif "GREAT-GRAND-MOTHER" in state:
-            state = state.replace("GRAND-MOTHER", "") + "AUNT"
-        elif "AUNT" in state:
-            state = "COUSIN"
-        elif state == "COUSIN":
-            state = "COUSIN"
-        else:
-            state = "ILLEGAL GOING DOWN"
-    return state
+    match direction, state:
+        case "up", "NOT RELATED":
+            return "MOTHER"
+        case "up", "MOTHER":
+            return "GRAND-MOTHER"
+        case "up", "GRAND-MOTHER":
+            return "GREAT-GRAND-MOTHER"
+        case "up", s if "GREAT-GRAND-MOTHER" in s:
+            return "GREAT-" + s
+        case "up", _:
+            return "ILLEGAL GOING UP"
+        case "down", "MOTHER":
+            return "SISTER"
+        case "down", "GRAND-MOTHER":
+            return "AUNT"
+        case "down", s if "GREAT-GRAND-MOTHER" in s:
+            return s.replace("GRAND-MOTHER", "") + "AUNT"
+        case "down", s if "AUNT" in s or s == "COUSIN":
+            return "COUSIN"
+        case "down", _:
+            return "ILLEGAL GOING DOWN"
 
 
 def explore(curr, state, visited, target):
@@ -66,20 +62,15 @@ def relate(start, target):
 
 def format_answer(answer):
     target, relation, start = answer
-    output = ""
-
-    if relation == "SISTER":
-        output = "SIBLINGS"
-    elif "MOTHER" in relation:
-        output = f"{target} is the {relation.lower()} of {start}"
-    elif "AUNT" in relation:
-        output = f"{target} is the {relation.lower()} of {start}"
-    elif relation == "COUSIN":
-        output = "COUSINS"
-    else:
-        output = "NOT RELATED"
-
-    return output
+    match relation:
+        case "SISTER":
+            return "SIBLINGS"
+        case "COUSIN":
+            return "COUSINS"
+        case s if "MOTHER" in s or "AUNT" in s:
+            return f"{target} is the {relation.lower()} of {start}"
+        case _:
+            return "NOT RELATED"
 
 
 with open("family.out", "w") as f:
