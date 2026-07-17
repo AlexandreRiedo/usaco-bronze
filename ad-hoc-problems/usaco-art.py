@@ -39,11 +39,10 @@ for color in colors:
 for color_1st in colors:
     other_colors = [color for color in colors if color != color_1st]
     canvas_edit = copy.deepcopy(canvas)
-    bboxes_edit = {color: [] for color in other_colors}
 
     # Paint over the color_1st's bbox
     for y, row in enumerate(canvas_edit):
-        for x, row in enumerate(row):
+        for x, cell in enumerate(row):
             if (
                 bboxes[color_1st][0] <= x <= bboxes[color_1st][2]
                 and bboxes[color_1st][1] <= y <= bboxes[color_1st][3]
@@ -55,6 +54,11 @@ for color_1st in colors:
         if bboxes[other_color] != find_bbox(other_color, canvas_edit):
             deps[other_color].add(color_1st)
 
+from rich import print as rprint
+
+rprint(f"{deps=}")
+
 with open("art.out", "w") as f:
     ans = sum(1 for dep in deps.values() if len(dep) == 0)
+    rprint(f"{ans=}")
     f.write(f"{ans}\n")
