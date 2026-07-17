@@ -54,11 +54,6 @@ for color_1st in colors:
         if bboxes[other_color] != find_bbox(other_color, canvas_edit):
             deps[other_color].add(color_1st)
 
-from rich import print as rprint
-
-rprint(f"{deps=}")
-
 with open("art.out", "w") as f:
     ans = sum(1 for dep in deps.values() if len(dep) == 0)
-    rprint(f"{ans=}")
     f.write(f"{ans}\n")
