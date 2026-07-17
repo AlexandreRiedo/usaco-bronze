@@ -15,14 +15,15 @@ def solve(log):
 
         if entry != -1 and counter != -1 and entry != counter:
             return ["-1"]
-        elif entry != -1:
+
+        if entry != -1:
             counter = entry
 
-        if idx == 0 and entry <= 0:
+        if idx == 0:
+            if entry > 0 or counter > 0:
+                return ["-1"]
             m += 1
             M += 1
-        elif idx == 0 and entry > 0:
-            return ["-1"]
         else:
             if entry == -1:
                 if counter == -1:
