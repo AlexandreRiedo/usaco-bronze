@@ -5,10 +5,8 @@ T = int(input())
 for _ in range(T):
     N, K = map(int, input().split())
     el = list(map(int, input().split()))
-    moves = 0
-
     el_counter = Counter(el)
-    el_sorted = sorted(set(el), reverse=K < 0)
+    moves = 0
 
     while max(el_counter.values()) > 1:
         el_sorted = sorted(el_counter.keys(), reverse=K < 0)
@@ -18,10 +16,10 @@ for _ in range(T):
             else:
                 moves += (el_counter[num] - 1) * (el_counter[num]) // 2
                 for n in range(1, el_counter[num]):
-                    el_counter[num + n * K] += 1
-                    el_counter[num] -= 1
+                    el_counter[num + (n * K)] += 1
+                el_counter[num] -= el_counter[num] - 1
 
-    print(f"{moves}")
+    print(moves)
 
 """
 4 1 4 1
