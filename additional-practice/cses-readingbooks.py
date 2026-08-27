@@ -2,12 +2,9 @@ n = int(input())
 times = list(map(int, input().split()))
 
 M = max(times)
-S = sum(times) - M
+S = sum(times)
 
-if S >= M:
-    print(S + M)
-else:
-    print(M - S)
+print(max(S, M * 2))
 
 """
 Claude's Hint
