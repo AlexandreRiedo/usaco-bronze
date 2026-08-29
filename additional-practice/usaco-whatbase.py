@@ -7,19 +7,16 @@ def convert(base10_num: int, base: int) -> int:
 
 with open("whatbase.in", "r") as fin, open("whatbase.out", "w") as fout:
     for _ in range(int(fin.readline())):
-        in_num_X, in_num_Y = map(int, fin.readline().split())
-        num_X, num_Y = min(in_num_X, in_num_Y), max(in_num_X, in_num_Y)
-
+        num_X, num_Y = map(int, fin.readline().split())
         base_X, base_Y = 10, 10
-        new_X, new_Y = convert(num_X, base_X), convert(num_Y, base_Y)
-        while new_X != new_Y:
-            if new_X < new_Y:
+        val_X, val_Y = convert(num_X, base_X), convert(num_Y, base_Y)
+
+        while val_X != val_Y:
+            if val_X < val_Y:
                 base_X += 1
+                val_X = convert(num_X, base_X)
             else:
                 base_Y += 1
-            new_X, new_Y = convert(num_X, base_X), convert(num_Y, base_Y)
+                val_Y = convert(num_Y, base_Y)
 
-        if num_X == in_num_X:
-            fout.write(f"{base_X} {base_Y}\n")
-        else:
-            fout.write(f"{base_Y} {base_X}\n")
+        fout.write(f"{base_X} {base_Y}\n")
