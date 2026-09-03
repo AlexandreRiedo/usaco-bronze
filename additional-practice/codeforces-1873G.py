@@ -1,66 +1,85 @@
-import random
+import itertools
 
 
-def local_solve(idx: int, s: list[str]) -> int:
-    left_idx, right_idx = idx, idx
-    while left_idx > 0 and s[left_idx - 1] == "A":
-        left_idx -= 1
-    while right_idx < len(s) - 1 and s[right_idx + 1] == "A":
-        right_idx += 1
-
-    left_score, right_score = abs(idx - left_idx), abs(idx - right_idx)
-    if left_score >= right_score:
-        s[left_idx : idx + 1] = "B" + "C" * left_score
-        return left_score
-    else:
-        s[idx : right_idx + 1] = "C" * right_score + "B"
-        return right_score
-
-
-def solve(s):
+def count(groups):
     ans = 0
-    for idx in range(len(s)):
-        if s[idx] == "B" and (
-            s[max(0, idx - 1)] == "A" or s[min(len(s) - 1, idx + 1)] == "A"
-        ):
-            ans += local_solve(idx, s)
+    while len(groups) >= 2:
+        if {"A", "B"}.issubset({*groups[-1], *groups[-2]}):
+            ans += groups.pop().count("A") + groups.pop().count("A")
+        else:
+            groups.pop()
     return ans
 
 
-from rich import print as rprint
+def solve(s) -> int:
+    groups = []
 
-while True:
-    s = [random.choice("AB") for _ in range(10)]
+    for _, group in itertools.groupby(s):
+        group = list(group)
+        if group.count("B") > 1:
+            groups.extend((["B"], ["B"]))
+        else:
+            groups.append(group)
 
-    rprint(f"[blue]{''.join(s)}")
-    if (count := s.count("A")) != (ans := solve(s)):
-        rprint(f"[red]{ans=} [yellow]{count=} [blue]{''.join(s)}")
-        break
+    return max(count(groups[:]), count(list(reversed(groups[:]))))
 
 
 # for _ in range(int(input())):
 #     s = list(input())
-#     # s = [random.choice("AB") for _ in range(10)]
-#     rprint("".join(s))
+#     print(solve(s))
 
-#     ans = 0
-#     for idx in range(len(s)):
-#         if s[idx] == "B" and (
-#             s[max(0, idx - 1)] == "A" or s[min(len(s) - 1, idx + 1)] == "A"
-#         ):
-#             ans += local_solve(idx, s)
-#     rprint(s, ans, "\n")
-#     # print(ans)
+import random
 
+from rich import print as rprint
+
+while (s := "".join([random.choice("AB") for _ in range(10)])).count("A") == solve(s):
+    continue
+rprint(f"{s=} {solve(s)=}")
 
 """
-VIP : COUNTER-EXAMPLE OF MY IDEA
+V2 COUNTER EXAMPLE
+AAAAABABAA
+-> code gives 6
+-> AAAAAB BAA gives 7
+"""
+
+"""
+AAABABAABA
+-> BA BAA BA with 4
+-> AAAB AB AAB with 6
+"""
+
+"""
+ABABAABABBBBBABABABABAABA
+A B A B AA B A B    B A B A B A B A B AA B A
+AB AB AAB AB    BA BA BA BA BAA BA -> 
+BA BAA BA BA    BA BA BA BAA BA
+"""
+
+"""
+VIP: COUNTER-EXAMPLE OF MY IDEA
 ABAABAABBA
 BAA BAA BA
 -> ACCBCCBBCB with 5
 
 AB AAB AAB BA
 -> BC BCC BCC CB with 6
+---
+VIP: COUNTER-EXAMPLE 2
+ABAAB
+-> ACCBB with 2
+-> BCBCC with 3
+---
+ABAABAAAB
+"""
+
+"""
+A B AA B AA B B A
+-> AB AAB AAB BA
+-> BAA BAA BA
+"""
+
+"""
 ---
 BAABA
 CBABA
@@ -110,5 +129,5 @@ BBABA
 """
 
 """
-"".join([random.choice("AB") for _ in range(7)])
+"".join([random.choice("AB") for _ in range(25)])
 """
