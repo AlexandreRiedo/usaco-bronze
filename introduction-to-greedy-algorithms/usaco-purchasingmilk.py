@@ -1,5 +1,7 @@
 import math
 
+from rich import print as rprint
+
 n, q = map(int, input().split())
 
 deals = [math.inf] * (10**5 + 100)
@@ -18,4 +20,4 @@ for _ in range(q):
 
     ans = min(ans, deals[exponent + 1])
 
-    print(ans)
+    rprint(ans)
