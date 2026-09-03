@@ -1,13 +1,21 @@
 import itertools
 
 
-def count(groups):
+def count(groups: list[list[str]]):
     ans = 0
+    # resolved = []
+    if len(groups) % 2 == 1 and len(groups) > 3:
+        to_remove = min([x for x in groups if x != ["B"]], default=None)
+        if to_remove is not None:
+            groups.remove(to_remove)
+
     while len(groups) >= 2:
         if {"A", "B"}.issubset({*groups[-1], *groups[-2]}):
+            # resolved.extend((groups[-1], groups[-2]))
             ans += groups.pop().count("A") + groups.pop().count("A")
         else:
             groups.pop()
+    # rprint(f"{resolved=}")
     return ans
 
 
@@ -24,17 +32,17 @@ def solve(s) -> int:
     return max(count(groups[:]), count(list(reversed(groups[:]))))
 
 
-# for _ in range(int(input())):
-#     s = list(input())
-#     print(solve(s))
+for _ in range(int(input())):
+    s = list(input())
+    print(solve(s))
 
-import random
+# import random
 
-from rich import print as rprint
+# from rich import print as rprint
 
-while (s := "".join([random.choice("AB") for _ in range(10)])).count("A") == solve(s):
-    continue
-rprint(f"{s=} {solve(s)=}")
+# while (s := "".join([random.choice("AB") for _ in range(10)])).count("A") == solve(s):
+#     continue
+# rprint(f"{s=} {solve(s)=}")
 
 """
 V2 COUNTER EXAMPLE
