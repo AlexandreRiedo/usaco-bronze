@@ -11,9 +11,9 @@ def insert_cost(a: str, s: str, a_init: int, cost: int, init_find: dict[str, int
     s_idx = init_find[a[a_init]]
 
     for a_char in a[a_init:]:
-        if (shift := s[s_idx:].find(a_char)) != -1:
+        if (shift := s.find(a_char, s_idx)) != -1:
             cost -= costs[a_char]
-            s_idx += 1 + shift
+            s_idx = 1 + shift
         else:
             break
 
