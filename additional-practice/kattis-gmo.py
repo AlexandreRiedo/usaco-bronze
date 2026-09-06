@@ -16,7 +16,7 @@ def insert_cost(a: str, s: str, a_init: int):
             break
         else:
             cost -= costs[a_char]
-            s_idx += 1
+            s_idx += 1 + s[s_idx:].find(a_char)
 
     return cost
 
