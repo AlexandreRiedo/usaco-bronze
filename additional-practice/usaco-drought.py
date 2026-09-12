@@ -7,11 +7,11 @@ for _ in range(int(input())):
         if i == len(h) - 1:
             continue
         elif i == len(h) - 2:
-            if h[i] < h[i + 1] or (len(h) == 2 and h[i] != h[i + 1]):
+            if h[i] < h[i + 1] or (len(h) % 2 == 0 and h[i] != h[i + 1]):
                 print(-1)
                 break
             else:
-                h[: i + 1] = [h[i + 1]] * len(h[: i + 1])
+                h[: i + 1] = [h[i + 1]] * (i + 1)
         else:
             if h[i + 1] > h[i]:
                 d = h[i + 1] - h[i]
@@ -25,12 +25,6 @@ for _ in range(int(input())):
                     print(-1)
                     break
                 else:
-                    h[: i + 1] = [h[i + 1]] * len(h[: i + 1])
+                    h[: i + 1] = [h[i + 1]] * (i + 1)
     else:
         print(sum(a - b for a, b in zip(h_og, h)))
-
-"""
-1
-3
-8 10 5
-"""
