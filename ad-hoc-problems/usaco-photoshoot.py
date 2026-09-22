@@ -1,21 +1,19 @@
 N, K = map(int, input().split())
-cows = [[0 for _ in range(N)] for _ in range(N)]
 Q = int(input())
-ans = 0
+
+cows = [[0 for _ in range(N)] for _ in range(N)]
+photos = [0 for _ in range(N - K + 1)] * (N - K + 1)
 
 for _ in range(Q):
     r, c, v = (int(x) - 1 for x in input().split())
-    cows[r][c] = v + 1
 
     for y in range(max(0, r - K + 1), min(N - K, r) + 1):
         for x in range(max(0, c - K + 1), min(N - K, c) + 1):
-            curr = 0
-            for curr_c in range(x, x + K):
-                for curr_r in range(y, y + K):
-                    curr += cows[curr_r][curr_c]
-            ans = max(curr, ans)
+            photos[x + y * (N - K + 1)] += v + 1 - cows[r][c]
+    cows[r][c] = v + 1
 
-    print(ans)
+    print(max(photos))
+
 
 """
 4 2
@@ -57,14 +55,14 @@ for _ in range(Q):
 0   0   0
 
 0   0   0
+0   3   0
 0   0   0
-0   0   3
 
 0   0   0
+0   5   0
 0   0   0
-0   0   5
 
 0   0   0
+0   7   0
 0   0   0
-0   0   7
 """
